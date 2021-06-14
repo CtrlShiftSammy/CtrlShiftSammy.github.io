@@ -1,5 +1,18 @@
 <html>
-<body>
-<h1 style="text-align:center;">I am Kaustav Bhattacharjee.</h1>
-</body>
+    <body>
+        <script>
+            function startTime() {
+                var today = new Date();
+                var h = today.getHours();
+                if (h > 17) {var greeting = "Good evening,";}
+                else if (h > 12) {var greeting = "Good afternoon,";}
+                else {var greeting = "Good morning,";}
+                greeting = greeting + " I am Kaustav Bhattacharjee.";
+                document.getElementById('txt').innerHTML = greeting;
+                var t = setTimeout(startTime, 60000);
+            }
+            
+            </script>
+        <h1 style="text-align:center;" id="txt"></h1>
+    </body>
 </html>
