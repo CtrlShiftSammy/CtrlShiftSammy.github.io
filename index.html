@@ -1,18 +1,156 @@
+<!DOCTYPE HTML>
 <html>
-    <body onload="startTime()">
-        <script>
-            function startTime() {
-                var today = new Date();
-                var h = today.getHours();
-                if (h > 17) {var greeting = "Good evening,";}
-                else if (h > 12) {var greeting = "Good afternoon,";}
-                else {var greeting = "Good morning,";}
-                greeting = greeting + " I am Kaustav Bhattacharjee.";
-                document.getElementById('txt').innerHTML = greeting;
-                var t = setTimeout(startTime, 60000);
-            }
-            
-            </script>
-        <h1 id = "txt" style="text-align:center;"></h1>
-    </body>
+	<head>
+		<title>Kaustav's portfolio</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload" onload="startTime()">
+
+		<!-- Sidebar -->
+			<section id="sidebar">
+				<div class="inner">
+					<nav>
+						<ul>
+							<li><a href="#intro">Welcome</a></li>
+							<li><a href="#one">About me</a></li>
+							<li><a href="#two">Projects</a></li>
+							<li><a href="#three">Hobbies</a></li>
+							<li><a href="#four">Contact me</a></li>
+						</ul>
+					</nav>
+				</div>
+			</section>
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Intro -->
+					<section id="intro" class="wrapper style1 fullscreen fade-up">
+						<div class="inner">
+							<h1 id = "greet" ></h1>
+							<p> I am Kaustav Bhattacharjee. <br />
+								Welcome to my portfolio page.</p>
+							<ul class="actions">
+								<li><a href="#one" class="button scrolly">Keep reading</a></li>
+							</ul>
+						</div>
+					</section>
+
+					<section id="one" class="wrapper style1 fullscreen fade-up">
+						<div class="inner">
+							<h2> I am a sophomore studying Physics at Indian Institute of Technology, Roorkee. <br />
+								My academic interests are Astronomy, Computational Physics and Quantum Computing. <br />
+								Get in contact with me if there is something you would like me to work on! :)</h2>
+						</div>
+					</section>
+	
+
+					<section id="two" class="wrapper style2 spotlights">
+						<section>
+							<a class="image"><img src="images/qc.png" alt="" data-position="center center" /></a>
+							<div class="content">
+								<div class="inner">
+									<h2>Quantum Chess</h2>
+									<p>A fun variant of chess where people can develop an intuition for the commonly misunderstood apects of quantum physics while playing chess. Developed on Python with the aid of Qiskit, as a part of the Qiskit Fall Hackathon 2021.</p>
+									<ul class="actions">
+										<li><a href="https://qiskithackathon.global21.bemyapp.com/#/projects/618a33805ecb7b01f6c46fd4" class="button">Learn more</a></li>
+									</ul>
+								</div>
+							</div>
+						</section>
+						<section>
+							<a class="image"><img src="images/nld.jpg" alt="" data-position="top center" /></a>
+							<div class="content">
+								<div class="inner">
+									<h2>Double Pendulum Chaos</h2>
+									<p>A simple side project visualizing how chaos sets into a double pendulum system. Inspired by <a href="https://twitter.com/3blue1brown//1392357775666159618"> Grant Sanderson</a> and <a href="https://www.youtube.com/watch?v=n7JK4Ht8k8M"> Sam Maksimovich</a>. </p>
+									<ul class="actions">
+										<li><a href="https://github.com/CtrlShiftSammy/Non-Linear-Dynamics" class="button">Learn more</a></li>
+									</ul>
+								</div>
+							</div>
+						</section>
+					</section>
+
+					<section id="three" class="wrapper style3 fade-up">
+						<div class="inner">
+							<h2>Hobbies</h2>
+							<p> Some of my hobbies are:</p>
+							<div class="features">
+								<section>
+									<span class="icon solid major fa-code"></span>
+									<h3>Coding</h3>
+									<p> I love coding and am eager to explore various aspects of it.</p>
+								</section>
+								<section>
+									<span class="icon solid major fa-cubes"></span>
+									<h3>Speedcubing</h3>
+									<p>I have been speedcubing for the last 5 years. </p>
+								</section>
+								<section>
+									<span class="icon solid major fa-lock"></span>
+									<h3>Lockpicking</h3>
+									<p>I am an amateur lock-picker. </p>
+								</section>
+								<section>
+									<span class="icon solid major fa-headphones"></span>
+									<h3>Music</h3>
+									<p>I am a fan of rock music. </p>
+								</section>
+							</div>
+						</div>
+					</section>
+
+					<section id="four" class="wrapper style1 fade-up">
+						<div class="inner">
+							<h2>Get in touch</h2>
+							<p>Something on your mind? Let me know below! </p>
+							<section>
+								<ul class="contact">
+									<li>
+										<h3>Email</h3>
+										<a href="#">kaustav2082@gmail.com</a>
+									</li>
+									<li>
+										<h3>Phone</h3>
+										<span>(+91) 8276-000-789</span>
+									</li>
+									<li>
+										<h3>Social</h3>
+										<ul class="icons">
+											<li><a href="https://github.com/CtrlShiftSammy" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+											<li><a href="https://www.instagram.com/kaustav__b/" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
+											<li><a href="https://www.linkedin.com/in/kaustav-b/" class="icon brands fa-linkedin-in"><span class="label">LinkedIn</span></a></li>
+										</ul>
+									</li>
+								</ul>
+							</section>
+					</div>
+					</section>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+			<script>
+				function startTime() {
+					var today = new Date();
+					var h = today.getHours();
+					if (h > 17) {var greeting = "Good evening!";}
+					else if (h > 12) {var greeting = "Good afternoon!";}
+					else {var greeting = "Good morning!";}
+					document.getElementById('greet').innerHTML = greeting;
+					var t = setTimeout(startTime, 60000);
+				}	
+			</script>	
+	</body>
 </html>
