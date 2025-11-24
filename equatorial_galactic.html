@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coordinate Converter</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #190563 0%, #000000 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, white, transparent),
+                radial-gradient(2px 2px at 60px 70px, white, transparent),
+                radial-gradient(1px 1px at 50px 50px, white, transparent),
+                radial-gradient(1px 1px at 130px 80px, white, transparent),
+                radial-gradient(2px 2px at 90px 10px, white, transparent),
+                radial-gradient(1px 1px at 200px 150px, white, transparent),
+                radial-gradient(1px 1px at 300px 50px, white, transparent),
+                radial-gradient(2px 2px at 250px 200px, white, transparent),
+                radial-gradient(1px 1px at 150px 180px, white, transparent),
+                radial-gradient(1px 1px at 350px 120px, white, transparent),
+                radial-gradient(2px 2px at 100px 250px, white, transparent),
+                radial-gradient(1px 1px at 400px 80px, white, transparent),
+                radial-gradient(1px 1px at 180px 30px, white, transparent),
+                radial-gradient(2px 2px at 320px 180px, white, transparent),
+                radial-gradient(1px 1px at 70px 120px, white, transparent),
+                radial-gradient(1px 1px at 450px 200px, white, transparent),
+                radial-gradient(2px 2px at 280px 90px, white, transparent),
+                radial-gradient(1px 1px at 500px 140px, white, transparent),
+                radial-gradient(1px 1px at 420px 30px, white, transparent),
+                radial-gradient(1px 1px at 160px 220px, white, transparent);
+            background-size: 550px 300px;
+            background-repeat: repeat;
+            opacity: 0.9;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 40px;
+            max-width: 800px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+        }
+        
+        .section-title {
+            font-weight: 600;
+            color: #250696;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .format-inputs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 10px;
+        }
+        
+        .format-inputs input {
+            text-align: center;
+        }
+        
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .result {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .result-item {
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .result-label {
+            font-weight: 600;
+            color: #555;
+        }
+        
+        .result-value {
+            color: #333;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .error {
+            background: #fee;
+            color: #c33;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1> Coordinate Converter</h1>
+        <p class="subtitle">Convert between Equatorial (RA/Dec) and Galactic (l/b) coordinates</p>
+        
+        <div class="section">
+            <div class="section-title">Equatorial Coordinates (J2000)</div>
+            
+            <div class="input-group">
+                <label>RA Format:</label>
+                <select id="raFormat" onchange="handleRAFormatChange()">
+                    <option value="hms">Hours Minutes Seconds</option>
+                    <option value="decimal">Decimal Degrees</option>
+                </select>
+            </div>
+            
+            <div class="input-group">
+                <label>Right Ascension (RA):</label>
+                <div id="raInputs"></div>
+            </div>
+            
+            <div class="input-group">
+                <label>Dec Format:</label>
+                <select id="decFormat" onchange="handleDecFormatChange()">
+                    <option value="dms">Degrees Minutes Seconds</option>
+                    <option value="decimal">Decimal Degrees</option>
+                </select>
+            </div>
+            
+            <div class="input-group">
+                <label>Declination (Dec):</label>
+                <div id="decInputs"></div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">Galactic Coordinates</div>
+            
+            <div class="input-group">
+                <label>Galactic Longitude (l) [degrees]:</label>
+                <input type="number" id="galL" step="any" placeholder="0.0 - 360.0" oninput="convertToEquatorial()">
+            </div>
+            
+            <div class="input-group">
+                <label>Galactic Latitude (b) [degrees]:</label>
+                <input type="number" id="galB" step="any" placeholder="-90.0 - 90.0" oninput="convertToEquatorial()">
+            </div>
+        </div>
+        
+        <div id="result"></div>
+    </div>
+
+    <script>
+        // Galactic pole and zero point (J2000)
+        const RA_NGP = 192.859508 * Math.PI / 180;  // RA of North Galactic Pole
+        const DEC_NGP = 27.128336 * Math.PI / 180;  // Dec of North Galactic Pole
+        const L_NCP = 122.93314 * Math.PI / 180;      // Galactic longitude of North Celestial Pole
+
+        function handleRAFormatChange() {
+            // Check if we have valid galactic coordinates to convert from
+            const galL = parseFloat(document.getElementById('galL').value);
+            const galB = parseFloat(document.getElementById('galB').value);
+            
+            if (!isNaN(galL) && !isNaN(galB)) {
+                // We have galactic coords, so update format then convert back
+                updateRAInputs();
+                convertToEquatorial();
+            } else {
+                // No galactic coords, just update the format (preserving RA value)
+                updateRAInputs();
+            }
+        }
+        
+        function handleDecFormatChange() {
+            // Check if we have valid galactic coordinates to convert from
+            const galL = parseFloat(document.getElementById('galL').value);
+            const galB = parseFloat(document.getElementById('galB').value);
+            
+            if (!isNaN(galL) && !isNaN(galB)) {
+                // We have galactic coords, so update format then convert back
+                updateDecInputs();
+                convertToEquatorial();
+            } else {
+                // No galactic coords, just update the format (preserving Dec value)
+                updateDecInputs();
+            }
+        }
+        
+        function updateRAInputs() {
+            const format = document.getElementById('raFormat').value;
+            const container = document.getElementById('raInputs');
+            
+            // Save current RA value before changing format
+            const currentRA = parseRA();
+            
+            if (format === 'hms') {
+                container.innerHTML = `
+                    <div class="format-inputs">
+                        <input type="number" id="raH" placeholder="Hours" min="0" max="23" step="1" oninput="convertToGalactic()">
+                        <input type="number" id="raM" placeholder="Minutes" min="0" max="59" step="1" oninput="convertToGalactic()">
+                        <input type="number" id="raS" placeholder="Seconds" min="0" max="60" step="0.001" oninput="convertToGalactic()">
+                    </div>
+                `;
+                // Convert current RA to HMS if valid
+                if (!isNaN(currentRA)) {
+                    const hours = currentRA / 15;
+                    document.getElementById('raH').value = Math.floor(hours);
+                    document.getElementById('raM').value = Math.floor((hours % 1) * 60);
+                    document.getElementById('raS').value = (((hours % 1) * 60) % 1 * 60).toFixed(3);
+                }
+            } else {
+                container.innerHTML = `<input type="number" id="raDec" placeholder="Decimal degrees (0-360)" step="any" oninput="convertToGalactic()">`;
+                // Convert current RA to decimal if valid
+                if (!isNaN(currentRA)) {
+                    document.getElementById('raDec').value = currentRA.toFixed(6);
+                }
+            }
+        }
+
+        function updateDecInputs() {
+            const format = document.getElementById('decFormat').value;
+            const container = document.getElementById('decInputs');
+            
+            // Save current Dec value before changing format
+            const currentDec = parseDec();
+            
+            if (format === 'dms') {
+                container.innerHTML = `
+                    <div class="format-inputs">
+                        <input type="number" id="decD" placeholder="Degrees" min="-90" max="90" step="1" oninput="convertToGalactic()">
+                        <input type="number" id="decM" placeholder="Minutes" min="0" max="59" step="1" oninput="convertToGalactic()">
+                        <input type="number" id="decS" placeholder="Seconds" min="0" max="60" step="0.001" oninput="convertToGalactic()">
+                    </div>
+                `;
+                // Convert current Dec to DMS if valid
+                if (!isNaN(currentDec)) {
+                    const sign = currentDec < 0 ? -1 : 1;
+                    const abs = Math.abs(currentDec);
+                    document.getElementById('decD').value = sign * Math.floor(abs);
+                    document.getElementById('decM').value = Math.floor((abs % 1) * 60);
+                    document.getElementById('decS').value = (((abs % 1) * 60) % 1 * 60).toFixed(3);
+                }
+            } else {
+                container.innerHTML = `<input type="number" id="decDec" placeholder="Decimal degrees (-90 to 90)" step="any" oninput="convertToGalactic()">`;
+                // Convert current Dec to decimal if valid
+                if (!isNaN(currentDec)) {
+                    document.getElementById('decDec').value = currentDec.toFixed(6);
+                }
+            }
+        }
+
+        function parseRA() {
+            const format = document.getElementById('raFormat').value;
+            
+            if (format === 'hms') {
+                const hInput = document.getElementById('raH');
+                const mInput = document.getElementById('raM');
+                const sInput = document.getElementById('raS');
+                
+                const h = hInput ? (parseFloat(hInput.value) || 0) : 0;
+                const m = mInput ? (parseFloat(mInput.value) || 0) : 0;
+                const s = sInput ? (parseFloat(sInput.value) || 0) : 0;
+                return (h + m/60 + s/3600) * 15; // Convert hours to degrees
+            } else {
+                const decInput = document.getElementById('raDec');
+                return decInput ? (parseFloat(decInput.value) || 0) : 0;
+            }
+        }
+
+        function parseDec() {
+            const format = document.getElementById('decFormat').value;
+            
+            if (format === 'dms') {
+                const dInput = document.getElementById('decD');
+                const mInput = document.getElementById('decM');
+                const sInput = document.getElementById('decS');
+                
+                const d = dInput ? (parseFloat(dInput.value) || 0) : 0;
+                const m = mInput ? (parseFloat(mInput.value) || 0) : 0;
+                const s = sInput ? (parseFloat(sInput.value) || 0) : 0;
+                const sign = d < 0 ? -1 : 1;
+                return sign * (Math.abs(d) + m/60 + s/3600);
+            } else {
+                const decInput = document.getElementById('decDec');
+                return decInput ? (parseFloat(decInput.value) || 0) : 0;
+            }
+        }
+
+        function decimalToHMS(degrees) {
+            const hours = degrees / 15;
+            const h = Math.floor(hours);
+            const m = Math.floor((hours - h) * 60);
+            const s = ((hours - h) * 60 - m) * 60;
+            return `${h}h ${m}m ${s.toFixed(3)}s`;
+        }
+
+        function decimalToDMS(degrees) {
+            const sign = degrees < 0 ? '-' : '+';
+            const abs = Math.abs(degrees);
+            const d = Math.floor(abs);
+            const m = Math.floor((abs - d) * 60);
+            const s = ((abs - d) * 60 - m) * 60;
+            return `${sign}${d}° ${m}' ${s.toFixed(3)}"`;
+        }
+
+        function convertToGalactic() {
+            try {
+                const ra = parseRA();
+                const dec = parseDec();
+                
+                // Skip if inputs are invalid
+                if (isNaN(ra) || isNaN(dec)) {
+                    return;
+                }
+                
+                // Convert to radians
+                const raRad = ra * Math.PI / 180;
+                const decRad = dec * Math.PI / 180;
+                
+                // Spherical trigonometry conversion
+                const sinB = Math.sin(decRad) * Math.sin(DEC_NGP) + 
+                            Math.cos(decRad) * Math.cos(DEC_NGP) * Math.cos(raRad - RA_NGP);
+                const b = Math.asin(sinB);
+                
+                const y = Math.cos(decRad) * Math.sin(raRad - RA_NGP);
+                const x = Math.sin(decRad) * Math.cos(DEC_NGP) - 
+                         Math.cos(decRad) * Math.sin(DEC_NGP) * Math.cos(raRad - RA_NGP);
+                
+                let l = L_NCP - Math.atan2(y, x);
+                
+                // Convert to degrees and normalize
+                l = l * 180 / Math.PI;
+                const bDeg = b * 180 / Math.PI;
+                
+                if (l < 0) l += 360;
+                if (l >= 360) l -= 360;
+                
+                // Update galactic inputs without triggering their oninput
+                const galLInput = document.getElementById('galL');
+                const galBInput = document.getElementById('galB');
+                
+                galLInput.value = l.toFixed(6);
+                galBInput.value = bDeg.toFixed(6);
+                
+                // Display results
+                displayResult('Equatorial → Galactic', {
+                    'RA (decimal)': ra.toFixed(6) + '°',
+                    'RA (HMS)': decimalToHMS(ra),
+                    'Dec (decimal)': dec.toFixed(6) + '°',
+                    'Dec (DMS)': decimalToDMS(dec),
+                    '': '',
+                    'l (Galactic Long.)': l.toFixed(6) + '°',
+                    'b (Galactic Lat.)': bDeg.toFixed(6) + '°'
+                });
+            } catch (e) {
+                // Silently fail during live updates
+            }
+        }
+
+        function convertToEquatorial() {
+            try {
+                const l = parseFloat(document.getElementById('galL').value);
+                const b = parseFloat(document.getElementById('galB').value);
+                
+                if (isNaN(l) || isNaN(b)) {
+                    return;
+                }
+                
+                // Convert to radians
+                const lRad = l * Math.PI / 180;
+                const bRad = b * Math.PI / 180;
+                
+                // Spherical trigonometry conversion (inverse)
+                const sinDec = Math.sin(bRad) * Math.sin(DEC_NGP) + 
+                              Math.cos(bRad) * Math.cos(DEC_NGP) * Math.cos(L_NCP - lRad);
+                const dec = Math.asin(sinDec);
+                
+                const y = Math.cos(bRad) * Math.sin(L_NCP - lRad);
+                const x = Math.cos(DEC_NGP) * Math.sin(bRad) - 
+                         Math.sin(DEC_NGP) * Math.cos(bRad) * Math.cos(L_NCP - lRad);
+                
+                let ra = Math.atan2(y, x) + RA_NGP;
+                
+                // Convert to degrees and normalize
+                ra = ra * 180 / Math.PI;
+                const decDeg = dec * 180 / Math.PI;
+                
+                if (ra < 0) ra += 360;
+                if (ra >= 360) ra -= 360;
+                
+                // Update equatorial inputs based on current format
+                const raFormat = document.getElementById('raFormat').value;
+                const decFormat = document.getElementById('decFormat').value;
+                
+                if (raFormat === 'hms') {
+                    const hours = ra / 15;
+                    const raHInput = document.getElementById('raH');
+                    const raMInput = document.getElementById('raM');
+                    const raSInput = document.getElementById('raS');
+                    
+                    if (raHInput) raHInput.value = Math.floor(hours);
+                    if (raMInput) raMInput.value = Math.floor((hours % 1) * 60);
+                    if (raSInput) raSInput.value = (((hours % 1) * 60) % 1 * 60).toFixed(3);
+                } else {
+                    const raDecInput = document.getElementById('raDec');
+                    if (raDecInput) raDecInput.value = ra.toFixed(6);
+                }
+                
+                if (decFormat === 'dms') {
+                    const sign = decDeg < 0 ? -1 : 1;
+                    const abs = Math.abs(decDeg);
+                    const decDInput = document.getElementById('decD');
+                    const decMInput = document.getElementById('decM');
+                    const decSInput = document.getElementById('decS');
+                    
+                    if (decDInput) decDInput.value = sign * Math.floor(abs);
+                    if (decMInput) decMInput.value = Math.floor((abs % 1) * 60);
+                    if (decSInput) decSInput.value = (((abs % 1) * 60) % 1 * 60).toFixed(3);
+                } else {
+                    const decDecInput = document.getElementById('decDec');
+                    if (decDecInput) decDecInput.value = decDeg.toFixed(6);
+                }
+                
+                // Display results
+                displayResult('Galactic → Equatorial', {
+                    'l (Galactic Long.)': l.toFixed(6) + '°',
+                    'b (Galactic Lat.)': b.toFixed(6) + '°',
+                    '': '',
+                    'RA (decimal)': ra.toFixed(6) + '°',
+                    'RA (HMS)': decimalToHMS(ra),
+                    'Dec (decimal)': decDeg.toFixed(6) + '°',
+                    'Dec (DMS)': decimalToDMS(decDeg)
+                });
+            } catch (e) {
+                // Silently fail during live updates
+            }
+        }
+
+        function displayResult(title, data) {
+            const resultDiv = document.getElementById('result');
+            let html = `<div class="result"><h3 style="margin-bottom: 15px; color: #667eea;">${title}</h3>`;
+            
+            for (const [label, value] of Object.entries(data)) {
+                if (label === '') {
+                    html += '<hr style="margin: 10px 0; border: none; border-top: 1px solid #ddd;">';
+                } else {
+                    html += `<div class="result-item"><span class="result-label">${label}:</span><span class="result-value">${value}</span></div>`;
+                }
+            }
+            
+            html += '</div>';
+            resultDiv.innerHTML = html;
+        }
+
+        function showError(message) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = `<div class="error">${message}</div>`;
+        }
+
+        // Initialize inputs on page load
+        updateRAInputs();
+        updateDecInputs();
+    </script>
+</body>
+</html>
