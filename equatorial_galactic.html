@@ -122,12 +122,13 @@
         
         .format-inputs {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 10px;
         }
         
         .format-inputs input {
             text-align: center;
+            min-width: 0;
         }
         
         button {
@@ -195,7 +196,7 @@
             <div class="section-title">Equatorial Coordinates (J2000)</div>
             
             <div class="input-group">
-                <label>RA Format:</label>
+                <label>Right Ascension Format:</label>
                 <select id="raFormat" onchange="handleRAFormatChange()">
                     <option value="hms">Hours Minutes Seconds</option>
                     <option value="decimal">Decimal Degrees</option>
@@ -203,12 +204,12 @@
             </div>
             
             <div class="input-group">
-                <label>Right Ascension (RA):</label>
+                <label>Right Ascension:</label>
                 <div id="raInputs"></div>
             </div>
             
             <div class="input-group">
-                <label>Dec Format:</label>
+                <label>Declination Format:</label>
                 <select id="decFormat" onchange="handleDecFormatChange()">
                     <option value="dms">Degrees Minutes Seconds</option>
                     <option value="decimal">Decimal Degrees</option>
@@ -216,7 +217,7 @@
             </div>
             
             <div class="input-group">
-                <label>Declination (Dec):</label>
+                <label>Declination:</label>
                 <div id="decInputs"></div>
             </div>
         </div>
